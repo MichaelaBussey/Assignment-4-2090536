@@ -39,4 +39,19 @@ public class GameManager : MonoBehaviour
     {
         SceneManager.LoadScene(0);
     }
+
+    public void Back()
+    {
+        SceneManager.LoadScene("StartMenu");
+    }
+
+    public void Creds()
+    {
+        SceneManager.LoadScene("Credits");
+    }
+
+    public void Play()
+    {
+        SceneManager.LoadScene("Enemy1");
+    }
 }

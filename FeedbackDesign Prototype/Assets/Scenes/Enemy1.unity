@@ -582,7 +582,7 @@ MonoBehaviour:
     m_HorizontalOverflow: 0
     m_VerticalOverflow: 0
     m_LineSpacing: 1
-  m_Text: Restore between 2-5 HP
+  m_Text: 'Restore between '
 --- !u!222 &123077710
 CanvasRenderer:
   m_ObjectHideFlags: 0
@@ -831,8 +831,8 @@ MonoBehaviour:
   m_TargetGraphic: {fileID: 1643916708}
   m_HandleRect: {fileID: 1643916707}
   m_Direction: 2
-  m_Value: 1.0359005
-  m_Size: 0.16026346
+  m_Value: 1.053763
+  m_Size: 0.16026334
   m_NumberOfSteps: 0
   m_OnValueChanged:
     m_PersistentCalls:
@@ -1713,7 +1713,7 @@ SpriteRenderer:
   m_LightmapParameters: {fileID: 0}
   m_SortingLayerID: 0
   m_SortingLayer: 0
-  m_SortingOrder: 1
+  m_SortingOrder: 12
   m_Sprite: {fileID: 21300024, guid: 261212b977f594d5dbc48631a5c1295c, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_FlipX: 0
@@ -3726,7 +3726,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 79b42aef6b0e38b468bda472892c5c91, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  spinAmount: 0.8
+  spinAmount: 0.7
   ball: {fileID: 0}
 --- !u!1 &1226077370
 GameObject:
@@ -5035,8 +5035,6 @@ MonoBehaviour:
   playerPrefab: {fileID: 683415236731244577}
   enemyPrefab: {fileID: 1852072590}
   critHit: {fileID: 2274734487292361357, guid: 8c8022aa5634a6c42823793f8841f328, type: 3}
-  winBox: {fileID: 438596187}
-  loseBox: {fileID: 1996454730}
   wonEnd: {fileID: 1064735977}
   loseEnd: {fileID: 1849315566}
   increaseStats: {fileID: 0}
@@ -6430,7 +6428,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: 0.00048828125, y: -284.91043}
+  m_AnchoredPosition: {x: 0.00048828125, y: -294.407}
   m_SizeDelta: {x: 579.5304, y: 782.4414}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!222 &1887206893
@@ -7180,7 +7178,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 79b42aef6b0e38b468bda472892c5c91, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  spinAmount: 0.8
+  spinAmount: 0.7
   ball: {fileID: 0}
 --- !u!212 &3102462270504948226
 SpriteRenderer:

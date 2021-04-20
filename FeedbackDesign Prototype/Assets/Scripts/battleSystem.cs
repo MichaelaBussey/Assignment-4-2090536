@@ -13,7 +13,7 @@ public class battleSystem : MonoBehaviour
 {
     public BattleState State;
     public Text CombatLog, atk1Dmg, atk2Dmg, healAmtText, currentText, oldText, olderText;
-    public GameObject playerPrefab, enemyPrefab, critHit, winBox, loseBox, wonEnd, loseEnd;
+    public GameObject playerPrefab, enemyPrefab, critHit, wonEnd, loseEnd;
     public GameObject increaseStats, PHalo, EHalo, lowHP;
     public bool HPUp, Atk1Up, Atk2Up, HealUp = false;
     public bool eAtk = false;
@@ -213,17 +213,17 @@ public class battleSystem : MonoBehaviour
 
     IEnumerator EnemyTurn()
     {        
-        EHalo.SetActive(true);
-        PHalo.SetActive(false);
+        //EHalo.SetActive(true);
+        //PHalo.SetActive(false);
         eAtk = true;
         yield return new WaitForSeconds(1);        
 
-        if (SceneManager.GetActiveScene().buildIndex == 0)
+        if (SceneManager.GetActiveScene().buildIndex == 1)
         {
             Enemy1Atk1();
         }
 
-        else if (SceneManager.GetActiveScene().buildIndex == 1)
+        else if (SceneManager.GetActiveScene().buildIndex == 2)
         {
             float Move = Random.Range(0f, 1f);
             eAtk = false;
@@ -238,7 +238,7 @@ public class battleSystem : MonoBehaviour
                 Enemy2Atk2();
             }
         }
-        else if (SceneManager.GetActiveScene().buildIndex == 2)
+        else if (SceneManager.GetActiveScene().buildIndex == 3)
         {
             float Move = Random.Range(0f, 1f);
             if (Move < 0.65)
@@ -270,6 +270,8 @@ public class battleSystem : MonoBehaviour
         else
         {
             StartCoroutine(PlayerAtk1());
+            EHalo.SetActive(true);
+            PHalo.SetActive(false);
         }
     }
 
@@ -282,6 +284,8 @@ public class battleSystem : MonoBehaviour
         else
         {
             StartCoroutine(PlayerAtk2());
+            EHalo.SetActive(true);
+            PHalo.SetActive(false);
         }
     }
 
@@ -294,11 +298,14 @@ public class battleSystem : MonoBehaviour
         else
         {
             StartCoroutine(PlayerHeal());
+            EHalo.SetActive(true);
+            PHalo.SetActive(false);
         }
 
 
     }
 
+    //enemy atks
     public void Enemy1Atk1()
     {
         int hitChance = 85;
@@ -343,7 +350,7 @@ public class battleSystem : MonoBehaviour
 
         if (Random.Range(0, 100) <= hitChance)
         {
-            int EnemyAtk = Random.Range(4, 8);
+            int EnemyAtk = Random.Range(4, 7);
             isDead = PlayerUnit.TakeDamage(EnemyAtk);
             GetComponent<AudioSource>().clip = Hit;
             GetComponent<AudioSource>().Play();
@@ -415,7 +422,7 @@ public class battleSystem : MonoBehaviour
 
         if (Random.Range(0, 100) <= hitChance)
         {
-            int EnemyAtk = Random.Range(4, 9);
+            int EnemyAtk = Random.Range(4, 8);
             isDead = PlayerUnit.TakeDamage(EnemyAtk);
             GetComponent<AudioSource>().clip = Hit;
             GetComponent<AudioSource>().Play();
