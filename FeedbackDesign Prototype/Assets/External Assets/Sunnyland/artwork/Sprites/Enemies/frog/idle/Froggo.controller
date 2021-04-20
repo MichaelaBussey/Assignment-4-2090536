@@ -61,7 +61,7 @@ AnimatorStateTransition:
   m_Name: 
   m_Conditions:
   - m_ConditionMode: 1
-    m_ConditionEvent: FrogAtk
+    m_ConditionEvent: eAtk
     m_EventTreshold: 0
   m_DstStateMachine: {fileID: 0}
   m_DstState: {fileID: -6196032123937429552}
@@ -86,7 +86,7 @@ AnimatorStateTransition:
   m_Name: 
   m_Conditions:
   - m_ConditionMode: 2
-    m_ConditionEvent: FrogAtk
+    m_ConditionEvent: eAtk
     m_EventTreshold: 0
   m_DstStateMachine: {fileID: 0}
   m_DstState: {fileID: 9178206572926351726}
@@ -111,17 +111,17 @@ AnimatorController:
   m_Name: Froggo
   serializedVersion: 5
   m_AnimatorParameters:
-  - m_Name: FrogAtk
+  - m_Name: eAtk
     m_Type: 4
     m_DefaultFloat: 0
     m_DefaultInt: 0
     m_DefaultBool: 0
     m_Controller: {fileID: 0}
-  - m_Name: FrogIdle
+  - m_Name: eIdle
     m_Type: 4
     m_DefaultFloat: 0
     m_DefaultInt: 0
-    m_DefaultBool: 0
+    m_DefaultBool: 1
     m_Controller: {fileID: 0}
   m_AnimatorLayers:
   - serializedVersion: 5
@@ -157,7 +157,7 @@ AnimatorState:
   m_MirrorParameterActive: 0
   m_CycleOffsetParameterActive: 0
   m_TimeParameterActive: 0
-  m_Motion: {fileID: 7400000, guid: 7e23d41e47ea86145a83a4cd607d4f40, type: 2}
+  m_Motion: {fileID: 7400000, guid: 8580d84570fd41a4fb2a7cd8f9008d56, type: 2}
   m_Tag: 
   m_SpeedParameter: 
   m_MirrorParameter: 

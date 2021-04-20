@@ -14,8 +14,11 @@ public class battleSystem : MonoBehaviour
     public BattleState State;
     public Text CombatLog, atk1Dmg, atk2Dmg, healAmtText;
     public GameObject playerPrefab, enemyPrefab, critHit, winBox, loseBox, wonEnd, loseEnd;
-    public GameObject increaseStats;
+    public GameObject increaseStats, PHalo, EHalo, lowHP;
     public bool HPUp, Atk1Up, Atk2Up, HealUp = false;
+    public bool eAtk = false;
+    public bool pAtk1, pAtk2, pHeal = false;
+    public AnimationClip PlAtk1, PlAtk2, PlHeal, EnAtk, PlIdle, EnIdle;
     public Stats PlayerUnit, EnemyUnit;
     public Transform playerLocation, enemyLocation;
     public BattleHUD playerHUD, enemyHUD;
@@ -36,8 +39,22 @@ public class battleSystem : MonoBehaviour
         State = BattleState.START;
         playerPrefab.SetActive(true);
         enemyPrefab.SetActive(true);
+        //AnimationClip PlIdle;
         playerHUD.HP.text = PlayerUnit.maxHP.ToString();
         StartCoroutine(SetupBattle());
+    }
+
+    private void Update()
+    {
+        if (PlayerUnit.currentHP <= 9)
+        {
+            lowHP.SetActive(true);
+        }
+
+        else
+        {
+            lowHP.SetActive(false);
+        }
     }
     IEnumerator SetupBattle()
     {
@@ -45,6 +62,7 @@ public class battleSystem : MonoBehaviour
         EnemyUnit = enemyPrefab.GetComponent<Stats>();
         playerHUD.SetHUD(PlayerUnit);
         enemyHUD.SetHUD(EnemyUnit);
+        EHalo.SetActive(false);
         yield return new WaitForSeconds(0);
         State = BattleState.PLAYERTURN;
         PlayerTurn();
@@ -59,15 +77,20 @@ public class battleSystem : MonoBehaviour
             //ACHIEVED MULTIPLE SOUNDS ON ONE SCRIPT!!
             GetComponent<AudioSource>().clip = Hit;
             GetComponent<AudioSource>().Play();
+            pAtk1 = true;
             enemyHUD.HP.text = EnemyUnit.currentHP.ToString();
             State = BattleState.ENEMYTURN;
             CombatLog.text += atk1.ToString() + "dmg dealt to enemy." + "\n";
             CombatLog.color = Color.blue;
+            EHalo.SetActive(false); 
+            PHalo.SetActive(true);
             yield return new WaitForSeconds(2);
 
             if (isDead)
             {
                 State = BattleState.WON;
+                EHalo.SetActive(false);
+                PHalo.SetActive(false);
                 EndBattle();
             }
 
@@ -81,6 +104,7 @@ public class battleSystem : MonoBehaviour
 
     IEnumerator PlayerAtk2()
     {
+        pAtk2 = true;
         if (State == BattleState.PLAYERTURN)
         {
             int hitChance = 70;
@@ -131,12 +155,14 @@ public class battleSystem : MonoBehaviour
 
     IEnumerator PlayerHeal()
     {
+        pHeal = true;
         if (State == BattleState.PLAYERTURN)
         {
             healAmt = Random.Range(healMin, healMax);
             PlayerUnit.Heal(healAmt);
             GetComponent<AudioSource>().clip = Heal;
             GetComponent<AudioSource>().Play();
+            pHeal = true;
             CombatLog.text += "+" + healAmt.ToString() + " HP healed!" + "\n";
             CombatLog.color = Color.green;
             playerHUD.HP.text = PlayerUnit.currentHP.ToString();
@@ -152,16 +178,22 @@ public class battleSystem : MonoBehaviour
     {
         if (State == BattleState.WON)
         {
-            winBox.SetActive(true);
+            //winBox.SetActive(true);
             //WON.SetActive(true);
             wonEnd.SetActive(true);
+            enemyPrefab.SetActive(false);
+            EHalo.SetActive(false);
+            PHalo.SetActive(false);
         }
 
         else if (State == BattleState.LOST)
         {
-            loseBox.SetActive(true);
+            //loseBox.SetActive(true);
+            playerPrefab.SetActive(false);
             //LOST.SetActive(true);
             loseEnd.SetActive(true);
+            EHalo.SetActive(false);
+            PHalo.SetActive(false);
         }
 
     }
@@ -169,8 +201,15 @@ public class battleSystem : MonoBehaviour
     IEnumerator EnemyTurn()
     {
         //int hitChance = 85;
-        //isDead = false;
-        yield return new WaitForSeconds(1);
+        //isDead = false;        
+        EHalo.SetActive(true);
+        PHalo.SetActive(false);
+        eAtk = true;
+        pAtk1 = false;
+        pAtk2 = false;
+        pHeal = false;
+        yield return new WaitForSeconds(1);        
+
         if (SceneManager.GetActiveScene().buildIndex == 0)
         {
             Enemy1Atk1();
@@ -179,6 +218,7 @@ public class battleSystem : MonoBehaviour
         else if (SceneManager.GetActiveScene().buildIndex == 1)
         {
             float Move = Random.Range(0f, 1f);
+            eAtk = false;
             print(Move);
 
             if (Move < 0.70)
@@ -211,6 +251,8 @@ public class battleSystem : MonoBehaviour
     void PlayerTurn()
     {
         //Choose an action
+        EHalo.SetActive(false);
+        PHalo.SetActive(true);
     }
 
     public void OnAttack1()
