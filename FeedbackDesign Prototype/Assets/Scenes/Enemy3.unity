@@ -932,8 +932,8 @@ MonoBehaviour:
   m_TargetGraphic: {fileID: 1643916708}
   m_HandleRect: {fileID: 1643916707}
   m_Direction: 2
-  m_Value: 1.0000004
-  m_Size: 0.32052708
+  m_Value: 1.0000002
+  m_Size: 0.32047173
   m_NumberOfSteps: 0
   m_OnValueChanged:
     m_PersistentCalls:
@@ -1026,7 +1026,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   m_Material: {fileID: 0}
   m_Color: {r: 0.19607843, g: 0.19607843, b: 0.19607843, a: 1}
-  m_RaycastTarget: 1
+  m_RaycastTarget: 0
   m_Maskable: 1
   m_OnCullStateChanged:
     m_PersistentCalls:
@@ -5143,6 +5143,9 @@ MonoBehaviour:
   atk1Dmg: {fileID: 434633336}
   atk2Dmg: {fileID: 791247133}
   healAmtText: {fileID: 1799140458}
+  currentText: {fileID: 0}
+  oldText: {fileID: 0}
+  olderText: {fileID: 0}
   playerPrefab: {fileID: 683415236840036188}
   enemyPrefab: {fileID: 5284674176444299745}
   critHit: {fileID: 2274734487292361357, guid: 8c8022aa5634a6c42823793f8841f328, type: 3}
@@ -5151,10 +5154,20 @@ MonoBehaviour:
   wonEnd: {fileID: 1064735977}
   loseEnd: {fileID: 1849315566}
   increaseStats: {fileID: 154398147}
+  PHalo: {fileID: 0}
+  EHalo: {fileID: 0}
+  lowHP: {fileID: 0}
   HPUp: 0
   Atk1Up: 0
   Atk2Up: 0
   HealUp: 0
+  eAtk: 0
+  PlAtk1: {fileID: 0}
+  PlAtk2: {fileID: 0}
+  PlHeal: {fileID: 0}
+  EnAtk: {fileID: 0}
+  PlIdle: {fileID: 0}
+  EnIdle: {fileID: 0}
   PlayerUnit: {fileID: 6467545855344407406}
   EnemyUnit: {fileID: 4148758137275798128}
   playerLocation: {fileID: 392090550}
@@ -6679,7 +6692,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: 0.000579834, y: -265.8241}
+  m_AnchoredPosition: {x: 0.000579834, y: -265.82407}
   m_SizeDelta: {x: 579.5304, y: 782.4414}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!222 &1887206893

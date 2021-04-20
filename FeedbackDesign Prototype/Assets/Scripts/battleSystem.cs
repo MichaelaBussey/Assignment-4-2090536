@@ -12,12 +12,12 @@ public enum BattleState
 public class battleSystem : MonoBehaviour
 {
     public BattleState State;
-    public Text CombatLog, atk1Dmg, atk2Dmg, healAmtText;
+    public Text CombatLog, atk1Dmg, atk2Dmg, healAmtText, currentText, oldText, olderText;
     public GameObject playerPrefab, enemyPrefab, critHit, winBox, loseBox, wonEnd, loseEnd;
     public GameObject increaseStats, PHalo, EHalo, lowHP;
     public bool HPUp, Atk1Up, Atk2Up, HealUp = false;
     public bool eAtk = false;
-    public bool pAtk1, pAtk2, pHeal = false;
+    //public bool pAtk1, pAtk2, pHeal = false;
     public AnimationClip PlAtk1, PlAtk2, PlHeal, EnAtk, PlIdle, EnIdle;
     public Stats PlayerUnit, EnemyUnit;
     public Transform playerLocation, enemyLocation;
@@ -39,7 +39,6 @@ public class battleSystem : MonoBehaviour
         State = BattleState.START;
         playerPrefab.SetActive(true);
         enemyPrefab.SetActive(true);
-        //AnimationClip PlIdle;
         playerHUD.HP.text = PlayerUnit.maxHP.ToString();
         StartCoroutine(SetupBattle());
     }
@@ -77,11 +76,11 @@ public class battleSystem : MonoBehaviour
             //ACHIEVED MULTIPLE SOUNDS ON ONE SCRIPT!!
             GetComponent<AudioSource>().clip = Hit;
             GetComponent<AudioSource>().Play();
-            pAtk1 = true;
             enemyHUD.HP.text = EnemyUnit.currentHP.ToString();
             State = BattleState.ENEMYTURN;
-            CombatLog.text += atk1.ToString() + "dmg dealt to enemy." + "\n";
-            CombatLog.color = Color.blue;
+            //CombatLog.text += atk1.ToString() + "dmg dealt to enemy." + "\n";
+            //CombatLog.color = Color.blue;
+            UpdateCombatLog(atk1.ToString() + "dmg dealt to enemy.", Color.blue);
             EHalo.SetActive(false); 
             PHalo.SetActive(true);
             yield return new WaitForSeconds(2);
@@ -104,7 +103,7 @@ public class battleSystem : MonoBehaviour
 
     IEnumerator PlayerAtk2()
     {
-        pAtk2 = true;
+        //pAtk2 = true;
         if (State == BattleState.PLAYERTURN)
         {
             int hitChance = 70;
@@ -117,28 +116,32 @@ public class battleSystem : MonoBehaviour
                 GetComponent<AudioSource>().clip = Hit;
                 GetComponent<AudioSource>().Play();
                 enemyHUD.HP.text = EnemyUnit.currentHP.ToString();
-                CombatLog.text += atk2.ToString() + "dmg dealt to enemy." + "\n";
-                CombatLog.color = Color.blue;
+                //CombatLog.text += atk2.ToString() + "dmg dealt to enemy." + "\n";
+                //CombatLog.color = Color.blue;
+                UpdateCombatLog(atk2.ToString() + "dmg dealt to enemy.", Color.blue);
+
                 if (atk2 >= 7)
                 {
                     GetComponent<AudioSource>().clip = Crit;
                     GetComponent<AudioSource>().Play();
                     Instantiate(critHit, enemyLocation);
-                    CombatLog.text += "It was a critical hit!" + "\n";
+                    //CombatLog.text += " It was a critical hit!";
+                    UpdateCombatLog("It was a critical hit!", Color.blue);
                 }
             }
             else
             {
                 GetComponent<AudioSource>().clip = Miss;
                 GetComponent<AudioSource>().Play();
-                CombatLog.text += ("Attack missed!" + "\n");
-                CombatLog.color = Color.red;
+                //CombatLog.text += ("Attack missed!" + "\n");
+                //CombatLog.color = Color.red;
+                UpdateCombatLog("Attack missed!", Color.red);
+
             }
-
-
 
             State = BattleState.ENEMYTURN;
             yield return new WaitForSeconds(2);
+
             if (isDead)
             {
                 State = BattleState.WON;
@@ -155,16 +158,17 @@ public class battleSystem : MonoBehaviour
 
     IEnumerator PlayerHeal()
     {
-        pHeal = true;
+        //pHeal = true;
         if (State == BattleState.PLAYERTURN)
         {
             healAmt = Random.Range(healMin, healMax);
             PlayerUnit.Heal(healAmt);
             GetComponent<AudioSource>().clip = Heal;
             GetComponent<AudioSource>().Play();
-            pHeal = true;
-            CombatLog.text += "+" + healAmt.ToString() + " HP healed!" + "\n";
-            CombatLog.color = Color.green;
+            //pHeal = true;
+            //CombatLog.text += "+" + healAmt.ToString() + " HP healed!" + "\n";
+            //CombatLog.color = Color.green;
+            UpdateCombatLog("+" + healAmt.ToString() + "HP healed!", Color.green);
             playerHUD.HP.text = PlayerUnit.currentHP.ToString();
             State = BattleState.ENEMYTURN;
             yield return new WaitForSeconds(2);
@@ -173,6 +177,15 @@ public class battleSystem : MonoBehaviour
 
     }
 
+    public void UpdateCombatLog (string Input, Color c)
+    {
+        olderText.text = oldText.text;
+        olderText.color = oldText.color;
+        oldText.text = currentText.text;
+        oldText.color = currentText.color;
+        currentText.text = Input;
+        currentText.color = c;
+    }
 
     void EndBattle()
     {
@@ -199,15 +212,10 @@ public class battleSystem : MonoBehaviour
     }
 
     IEnumerator EnemyTurn()
-    {
-        //int hitChance = 85;
-        //isDead = false;        
+    {        
         EHalo.SetActive(true);
         PHalo.SetActive(false);
         eAtk = true;
-        pAtk1 = false;
-        pAtk2 = false;
-        pHeal = false;
         yield return new WaitForSeconds(1);        
 
         if (SceneManager.GetActiveScene().buildIndex == 0)
@@ -224,12 +232,10 @@ public class battleSystem : MonoBehaviour
             if (Move < 0.70)
             {
                 Enemy2Atk1();
-                print("atk1");
             }
             else
             {
                 Enemy2Atk2();
-                print("atk2");
             }
         }
         else if (SceneManager.GetActiveScene().buildIndex == 2)
@@ -304,16 +310,19 @@ public class battleSystem : MonoBehaviour
             isDead = PlayerUnit.TakeDamage(EnemyAtk);
             GetComponent<AudioSource>().clip = Hit;
             GetComponent<AudioSource>().Play();
-            CombatLog.text += EnemyAtk.ToString() + "dmg dealt to you." + "\n";
-            CombatLog.color = Color.red;
+            //CombatLog.text += EnemyAtk.ToString() + "dmg dealt to you." + "\n";
+            //CombatLog.color = Color.red;
+            UpdateCombatLog(EnemyAtk.ToString() + "dmg dealt to you.", Color.red);
             playerHUD.HP.text = PlayerUnit.currentHP.ToString();
         }
         else
         {
             GetComponent<AudioSource>().clip = Miss;
             GetComponent<AudioSource>().Play();
-            CombatLog.text += ("Enemy attack missed!" + "\n");
-            CombatLog.color = Color.red;
+            //CombatLog.text += ("Enemy attack missed!" + "\n");            
+            //CombatLog.color = Color.red;
+            UpdateCombatLog("Enemy attack missed!", Color.red);
+
         }
 
         if (isDead)
@@ -338,16 +347,18 @@ public class battleSystem : MonoBehaviour
             isDead = PlayerUnit.TakeDamage(EnemyAtk);
             GetComponent<AudioSource>().clip = Hit;
             GetComponent<AudioSource>().Play();
-            CombatLog.text += EnemyAtk.ToString() + "dmg dealt to you." + "\n";
-            CombatLog.color = Color.red;
+            //CombatLog.text += EnemyAtk.ToString() + "dmg dealt to you." + "\n";
+            //CombatLog.color = Color.red;
+            UpdateCombatLog(EnemyAtk.ToString() + "dmg dealt to you.", Color.red);
             playerHUD.HP.text = PlayerUnit.currentHP.ToString();
         }
         else
         {
             GetComponent<AudioSource>().clip = Miss;
             GetComponent<AudioSource>().Play();
-            CombatLog.text += ("Enemy attack missed!" + "\n");
-            CombatLog.color = Color.red;
+            //CombatLog.text += ("Enemy attack missed!" + "\n");
+            //CombatLog.color = Color.red;
+            UpdateCombatLog("Enemy attack missed!", Color.red);
         }
 
         if (isDead)
@@ -372,16 +383,18 @@ public class battleSystem : MonoBehaviour
             isDead = PlayerUnit.TakeDamage(EnemyAtk);
             GetComponent<AudioSource>().clip = Hit;
             GetComponent<AudioSource>().Play();
-            CombatLog.text += EnemyAtk.ToString() + "dmg dealt to you." + "\n" + "It was a Hard Attack!" + "\n";
-            CombatLog.color = Color.red;
+            //CombatLog.text += EnemyAtk.ToString() + "dmg dealt to you." + "\n" + "It was a Hard Attack!" + "\n";
+            //CombatLog.color = Color.red;
+            UpdateCombatLog(EnemyAtk.ToString() + "dmg dealt to you." + "It was a Hard Attack!", Color.red);
             playerHUD.HP.text = PlayerUnit.currentHP.ToString();
         }
         else
         {
             GetComponent<AudioSource>().clip = Miss;
             GetComponent<AudioSource>().Play();
-            CombatLog.text += ("Enemy's Hard attack missed!" + "\n");
-            CombatLog.color = Color.red;
+            //CombatLog.text += ("Enemy's Hard attack missed!" + "\n");
+            //CombatLog.color = Color.red;
+            UpdateCombatLog("Enemy attack missed!", Color.red);
         }
 
         if (isDead)
@@ -406,16 +419,18 @@ public class battleSystem : MonoBehaviour
             isDead = PlayerUnit.TakeDamage(EnemyAtk);
             GetComponent<AudioSource>().clip = Hit;
             GetComponent<AudioSource>().Play();
-            CombatLog.text += EnemyAtk.ToString() + "dmg dealt to you." + "\n";
-            CombatLog.color = Color.red;
+            //CombatLog.text += EnemyAtk.ToString() + "dmg dealt to you." + "\n";
+            //CombatLog.color = Color.red;
+            UpdateCombatLog(EnemyAtk.ToString() + "dmg dealt to you.", Color.red);
             playerHUD.HP.text = PlayerUnit.currentHP.ToString();
         }
         else
         {
             GetComponent<AudioSource>().clip = Miss;
             GetComponent<AudioSource>().Play();
-            CombatLog.text += ("Enemy attack missed!" + "\n");
-            CombatLog.color = Color.red;
+            //CombatLog.text += ("Enemy attack missed!" + "\n");
+            //CombatLog.color = Color.red;
+            UpdateCombatLog("Enemy attack missed!", Color.red);
         }
 
         if (isDead)
@@ -440,16 +455,18 @@ public class battleSystem : MonoBehaviour
             isDead = PlayerUnit.TakeDamage(EnemyAtk);
             GetComponent<AudioSource>().clip = Hit;
             GetComponent<AudioSource>().Play();
-            CombatLog.text += EnemyAtk.ToString() + "dmg dealt to you." + "\n" + "It was a Hard Attack!" + "\n";
-            CombatLog.color = Color.red;
+            //CombatLog.text += EnemyAtk.ToString() + "dmg dealt to you." + "\n" + "It was a Hard Attack!" + "\n";
+            //CombatLog.color = Color.red;
+            UpdateCombatLog(EnemyAtk.ToString() + "dmg dealt to you." + "It was a Hard Attack!", Color.red);
             playerHUD.HP.text = PlayerUnit.currentHP.ToString();
         }
         else
         {
             GetComponent<AudioSource>().clip = Miss;
             GetComponent<AudioSource>().Play();
-            CombatLog.text += ("Enemy attack missed!" + "\n");
-            CombatLog.color = Color.red;
+            //CombatLog.text += ("Enemy attack missed!" + "\n");
+            //CombatLog.color = Color.red;
+            UpdateCombatLog("Enemy attack missed!", Color.red);
         }
 
         if (isDead)
@@ -497,7 +514,6 @@ public class battleSystem : MonoBehaviour
         healAmtText.text = healMin.ToString() + "-" + "8 HP";
         increaseStats.SetActive(false);
     }
-
     public void HPUpBtn2()
     {
         HPUp = true;
