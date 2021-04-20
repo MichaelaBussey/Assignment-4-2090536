@@ -18,7 +18,7 @@ public class battleSystem : MonoBehaviour
     public bool HPUp, Atk1Up, Atk2Up, HealUp = false;
     public bool eAtk = false;
     //public bool pAtk1, pAtk2, pHeal = false;
-    public AnimationClip PlAtk1, PlAtk2, PlHeal, EnAtk, PlIdle, EnIdle;
+    //public AnimationClip PlAtk1, PlAtk2, PlHeal, EnAtk, PlIdle, EnIdle;
     public Stats PlayerUnit, EnemyUnit;
     public Transform playerLocation, enemyLocation;
     public BattleHUD playerHUD, enemyHUD;
@@ -379,7 +379,7 @@ public class battleSystem : MonoBehaviour
 
         if (Random.Range(0, 100) <= hitChance)
         {
-            int EnemyAtk = Random.Range(6, 9);
+            int EnemyAtk = Random.Range(5, 9);
             isDead = PlayerUnit.TakeDamage(EnemyAtk);
             GetComponent<AudioSource>().clip = Hit;
             GetComponent<AudioSource>().Play();
